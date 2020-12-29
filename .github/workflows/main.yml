@@ -31,10 +31,36 @@ jobs:
           sudo apt-get install -y nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
           ./easybuild.sh -64
 
-      - uses: actions/upload-artifact@v2
+      - name: Create a Release
+        uses: actions/create-release@v1
         with:
-          name: etlegacy binary
-          path: |
-            /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
-            ./build/etlegacy-2.76-dirty-x86_64.tar.gz
+          # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
+          tag_name: ${{ github.ref }}
+          # The name of the release. For example, `Release v1.0.1`
+          release_name: ${{ github.ref }}
+          # Text describing the contents of the tag.
+          #body: # optional
+          # Path to file with information about the tag.
+          #body_path: # optional
+          # `true` to create a draft (unpublished) release, `false` to create a published one. Default: `false`
+          draft: true
+          # `true` to identify the release as a prerelease. `false` to identify the release as a full release. Default: `false`
+          prerelease: true
+          # Any branch or commit SHA the Git tag is created from, unused if the Git tag already exists. Default: SHA of current commit
+          #commitish: # optional
+          # Owner of the repository if it is not the current one
+          #owner: # optional
+          # Repository on which to release.  Used only if you want to create the release on another repo
+          #repo: # optional
+      - name: Upload a Release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        with:
+          # The URL for uploading assets to the release
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          # The path to the asset you want to upload
+          asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+          # The name of the asset you want to upload
+          asset_name: etlegacy-2.76-dirty-x86_64.tar.gz
+          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+          asset_content_type: application/gzip
           
