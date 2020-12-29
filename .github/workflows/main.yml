@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: https://api.github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
+          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
           # The name of the asset you want to upload
@@ -59,7 +59,8 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
-          sudo apt-get install -y g++-4.8-multilib gcc-multilib gcc-4.9-base:i386 nasm:i386 libx11-6:i386 libx11-dev:i386 libgcc1:i386 libglib2.0-dev:i386 fglrx:i386 fglrx-dev:i386 libasound2-dev:i386 pulseaudio:i386 libpulse-dev:i386
+          sudo apt-get install -y g++-4.8-multilib gcc-multilib nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
+          sudo dpkg --add-architecture i386
           ./easybuild.sh
 
       - name: Upload a Release Asset
@@ -69,7 +70,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: https://api.github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
+          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-i386.tar.gz
           # The name of the asset you want to upload
@@ -99,7 +100,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: https://api.github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
+          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
           # The name of the asset you want to upload
@@ -120,8 +121,7 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
-          brew install -y nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
-          brew cask install xquartz
+          brew cask install xquartz nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
           ./easybuild.sh -64 --osx=10.15
 
       - name: Upload a Release Asset
@@ -131,7 +131,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: https://api.github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
+          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-OSX.tar.gz
           # The name of the asset you want to upload
