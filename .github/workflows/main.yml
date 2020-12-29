@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Build and upload
 
 # Controls when the action will run. 
 on:
@@ -34,5 +34,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: etlegacy-client
-          path: ./build/etl.exe
+          path: /home/runner/etlegacy/./etl.exe
           
