@@ -88,7 +88,7 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
-          sudo -xbps-install -y autoconf automake cmake zip nasm clang libtool gcc-multilib libX11 libX11-32bit libX11-devel libX11-devel-32bit libglvnd libglvnd-32bit libglvnd-devel libglvnd-devel-32bit glu glu-32bit glu-devel glu-devel-32bit
+          sudo apt-get install -y autoconf automake cmake zip nasm clang libtool gcc-multilib libX11 libX11-32bit libX11-devel libX11-devel-32bit libglvnd libglvnd-32bit libglvnd-devel libglvnd-devel-32bit glu glu-32bit glu-devel glu-devel-32bit
           ./easybuild.sh
 
       - name: Upload a Release Asset
@@ -149,7 +149,7 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
-          ./easybuild.bat -64 --osx=10.15
+          ./easybuild.sh -64 --osx=10.15
 
       - name: Upload a Release Asset
         id: upload-release-asset 
