@@ -33,6 +33,8 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: etlegacy-client
-          path: /home/runner/etlegacy/./etl.exe
+          name: etlegacy binary
+          path: |
+            /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+            ./build/etlegacy-2.76-dirty-x86_64.tar.gz
           
