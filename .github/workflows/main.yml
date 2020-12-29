@@ -15,35 +15,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  create_branch:
-    runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Create a Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
-          tag_name: ${{ github.ref }}
-          # The name of the release. For example, `Release v1.0.1`
-          release_name: ${{ github.ref }}
-          # Text describing the contents of the tag.
-          #body: # optional
-          # Path to file with information about the tag.
-          #body_path: # optional
-          # `true` to create a draft (unpublished) release, `false` to create a published one. Default: `false`
-          draft: true
-          # `true` to identify the release as a prerelease. `false` to identify the release as a full release. Default: `false`
-          prerelease: true
-          # Any branch or commit SHA the Git tag is created from, unused if the Git tag already exists. Default: SHA of current commit
-          #commitish: # optional
-          # Owner of the repository if it is not the current one
-          #owner: # optional
-          # Repository on which to release.  Used only if you want to create the release on another repo
-          #repo: # optional
-    
   # This workflow contains a single job called "build"
   build-unix:
     # The type of runner that the job will run on
@@ -67,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: https://github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
           # The name of the asset you want to upload
@@ -88,7 +59,7 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
-          sudo apt-get install -y autoconf automake cmake zip nasm clang libtool gcc-multilib libX11 libX11-32bit libX11-devel libX11-devel-32bit libglvnd libglvnd-32bit libglvnd-devel libglvnd-devel-32bit glu glu-32bit glu-devel glu-devel-32bit
+          sudo apt-get install -y nasm gcc-multilib libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
           ./easybuild.sh
 
       - name: Upload a Release Asset
@@ -98,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: https://github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-i386.tar.gz
           # The name of the asset you want to upload
@@ -109,7 +80,7 @@ jobs:
   # This workflow contains a single job called "build"
   build-windows:
     # The type of runner that the job will run on
-    runs-on: window-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -128,7 +99,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: https://github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
           # The name of the asset you want to upload
@@ -149,6 +120,7 @@ jobs:
       # Install dependencies and build ETL
       - name: Install Dependencies and Build
         run: |
+          sudo brew install -y nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
           ./easybuild.sh -64 --osx=10.15
 
       - name: Upload a Release Asset
@@ -158,7 +130,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           # The URL for uploading assets to the release
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: https://github.com/Aranud/etlegacy-1/releases/tag/untagged-0e3ea85cb7172e6fbd27
           # The path to the asset you want to upload
           asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-OSX.tar.gz
           # The name of the asset you want to upload
