@@ -21,7 +21,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
            name: lnx64-package
-           path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+           path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-i386.tar.gz
         
   lnx64:
      runs-on: ubuntu-16.04
@@ -57,7 +57,7 @@ jobs:
        - uses: actions/upload-artifact@v2
          with:
             name: osx-package
-            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-OSX.tar.gz
  
   win:
      runs-on: windows-2019
@@ -71,4 +71,4 @@ jobs:
        - uses: actions/upload-artifact@v2
          with:
             name: win-package
-            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
