@@ -1,141 +1,74 @@
-# This is a basic workflow to help you get started with Actions
+name: ETLBuild
 
-name: Build and upload
+on: [ push ]
 
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build-unix:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  lnx32:
+    runs-on: ubuntu-16.04
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Install dependencies and build ETL
-      - name: Install Dependencies and Build
+      - name: Install dependencies
         run: |
-          sudo apt-get install -y nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
-          ./easybuild.sh -64
-          
-      - name: Upload a Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          # The URL for uploading assets to the release
-          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
-          # The path to the asset you want to upload
-          asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
-          # The name of the asset you want to upload
-          asset_name: etlegacy-2.76-dirty-x86_64.tar.gz
-          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-          asset_content_type: application/gzip
-
-# This workflow contains a single job called "build"
-  build-unix-32:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Install dependencies and build ETL
-      - name: Install Dependencies and Build
-        run: |
-          sudo apt-get install -y g++-4.8-multilib gcc-multilib nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
           sudo dpkg --add-architecture i386
-          ./easybuild.sh
+          sudo apt update
+          sudo apt install nasm gcc-multilib g++-multilib
+          sudo apt install libwayland-dev:i386 wayland-protocols libgl1-mesa-dev:i386 libglu1-mesa-dev:i386
+          sudo apt install libasound2-dev:i386 pulseaudio:i386 libpulse-dev zlib1g-dev:i386 libsnappy-dev:i386 liblz4-1:i386
+      - name: Build
+        shell: bash
+        run: ./easybuild.sh -32
 
-      - name: Upload a Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      - uses: actions/upload-artifact@v2
         with:
-          # The URL for uploading assets to the release
-          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
-          # The path to the asset you want to upload
-          asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-i386.tar.gz
-          # The name of the asset you want to upload
-          asset_name: etlegacy-2.76-dirty-i386.tar.gz
-          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-          asset_content_type: application/gzip
-  
-  # This workflow contains a single job called "build"
-  build-windows:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
+           name: lnx64-package
+           path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+        
+  lnx64:
+     runs-on: ubuntu-16.04
+     steps:
+       - uses: actions/checkout@v2
+       - name: Install dependencies
+         run: |
+           sudo apt update
+           sudo apt install nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
+ 
+       - name: Build
+         shell: bash
+         run: ./easybuild.sh -64
+       
+       - uses: actions/upload-artifact@v2
+         with:
+            name: lnx64-package
+            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+         
+  osx:
+     runs-on: macos-10.15
+     steps:
+       - uses: actions/checkout@v2
+       - name: Install dependencies
+         run: brew bundle
+ 
+       - name: Build
+         env:
+           DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
+         shell: bash
+         run: ./easybuild.sh -64 --osx=10.14
+         
+       - uses: actions/upload-artifact@v2
+         with:
+            name: osx-package
+            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
+ 
+  win:
+     runs-on: windows-2019
+     steps:
+       - uses: actions/checkout@v2
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+       - name: Build
+         shell: cmd
+         run: call .\easybuild.bat
 
-      # Install dependencies and build ETL
-      - name: Install Dependencies and Build
-        run: |
-          ./easybuild.bat
-
-      - name: Upload a Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          # The URL for uploading assets to the release
-          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
-          # The path to the asset you want to upload
-          asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
-          # The name of the asset you want to upload
-          asset_name: etlegacy-2.76-dirty-x86.zip
-          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-          asset_content_type: application/zip
-      
-  # This workflow contains a single job called "build"
-  build-macos:
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Install dependencies and build ETL
-      - name: Install Dependencies and Build
-        run: |
-          brew cask install xquartz nasm libwayland-dev wayland-protocols libgl1-mesa-dev libglu1-mesa-dev libasound2-dev pulseaudio libpulse-dev
-          ./easybuild.sh -64 --osx=10.15
-
-      - name: Upload a Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          # The URL for uploading assets to the release
-          upload_url: "https://uploads.github.com/repos/Aranud/etlegacy-1/releases/1/assets{?Snapshot,Snapshot}"
-          # The path to the asset you want to upload
-          asset_path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-OSX.tar.gz
-          # The name of the asset you want to upload
-          asset_name: etlegacy-2.76-dirty-OSX.tar.gz
-          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-          asset_content_type: application/gzip
-          
+       - uses: actions/upload-artifact@v2
+         with:
+            name: win-package
+            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86_64.tar.gz
