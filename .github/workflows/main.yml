@@ -14,6 +14,7 @@ jobs:
           sudo apt install nasm gcc-multilib g++-multilib
           sudo apt install libwayland-dev:i386 wayland-protocols libgl1-mesa-dev:i386 libglu1-mesa-dev:i386
           sudo apt install libasound2-dev:i386 pulseaudio:i386 libpulse-dev zlib1g-dev:i386 libsnappy-dev:i386 liblz4-1:i386
+          
       - name: Build
         shell: bash
         run: ./easybuild.sh -32
@@ -71,4 +72,4 @@ jobs:
        - uses: actions/upload-artifact@v2
          with:
             name: win-package
-            path: /home/runner/work/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
+            path: D:/a/etlegacy-1/etlegacy-1/build/etlegacy-2.76-dirty-x86.zip
